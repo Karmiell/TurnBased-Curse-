@@ -2,15 +2,11 @@ using UnityEngine;
 
 public class TestGridInicialitor : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    private GridSystem meuGrid;
+    
     void Start()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        meuGrid = new GridSystem(10,10);
     }
 }
+  

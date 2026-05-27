@@ -4,7 +4,7 @@ using UnityEngine;
 public class MouseWorld : MonoBehaviour
 {
     public static MouseWorld Instance;
-    
+    [SerializeField]public LayerMask layerMaskDefaut;
 
     private void Awake()
     {
@@ -20,6 +20,7 @@ public class MouseWorld : MonoBehaviour
 
     public RaycastHit GetWorldMousePosition(LayerMask layerMask)
     {
+        if(layerMask.IsUnityNull())layerMask = layerMaskDefaut;
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         Physics.Raycast(ray, out RaycastHit hit, float.MaxValue, layerMask);
         return hit;

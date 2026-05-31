@@ -5,6 +5,7 @@ using UnityEngine;
 public class TextGridVisual : MonoBehaviour
 {
  private TextMeshPro gridText;
+ private GridObject gridObject;
  private GridPosition gridPosition;
 
     private void Start()
@@ -13,18 +14,20 @@ public class TextGridVisual : MonoBehaviour
         if(!gridText){
             Debug.Log($"Não foi possivel instanciar o componenete {gridText} no {gameObject.name}");
         }
-        gridPosition = LevelGrid.meuGrid.GetGridPosition(transform.position);
+        gridPosition = LevelGrid.Instance.meuGrid.GetGridPosition(transform.position);
+        gridObject = LevelGrid.Instance.meuGrid.GetGridObject(gridPosition);
 
-        if(!gridText || gridPosition.IsUnityNull())return;
+        if(!gridText || gridObject.IsUnityNull())return;
         ChangeTextVisual(gridText);
     }
-    private void LateUpdate()
+    private void Update()
     {
         ChangeTextVisual(gridText);
     }
 
     private void ChangeTextVisual(TextMeshPro textMeshPro)
     {
-         textMeshPro.text = gridPosition.ToString();
+        if(textMeshPro. text == gridObject.ToString())return;
+         textMeshPro.text = gridObject.ToString();
     }
 }

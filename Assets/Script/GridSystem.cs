@@ -57,15 +57,20 @@ public class GridSystem
             }
         }
     }
+     public GridObject GetGridObject(GridPosition gridPosition)
+    {
+        return grid[gridPosition.X, gridPosition.Z];
+    }
 }
 
 public class GridObject
 {
-    //essa classe foi feita em um outro scipt no curso mas acho que nao tem problema fazer no mesmo, é mais facil para vizualizar tudo
     
     private bool isWalkable;
     public GridPosition gridPosition;
     private GridSystem gridSystem;
+     private List<Unit> unitsList;
+    
     
 
     public GridObject(GridSystem gridSystem, GridPosition gridPosition, bool isWalkable = true)
@@ -73,50 +78,41 @@ public class GridObject
         this.gridPosition = gridPosition;
         this.gridSystem = gridSystem;
         
-
+        unitsList = new List<Unit>();
         
     }
-   
-
-}
-public struct GridPosition
-{
-  public int X;
-  public int Z;
-  private List<Unit> unitsList;
-
-    public GridPosition( int X, int Z)
-    {
-    this.X = X;
-    this.Z = Z;
-    unitsList = new List<Unit>();
-    }
-    public override string ToString()
+ 
+  
+ public override string ToString()
     {
         string listUnitString = "";
         foreach(var atual in unitsList)
         {
             listUnitString += atual + "\n";
         }
-        return $"X:{X}; Y:{Z}\n" + listUnitString;
+        return $"X:{gridPosition.X}; Y:{gridPosition.Z}\n" + listUnitString;
     }
+    public List<Unit> GetUnitsList() => unitsList;
 
-    public void AddUnitAtGridPosition(Unit unit, GridPosition gridPosition) => gridPosition.unitsList.Add(unit);
-    public void RemoveUnitAtGridPosition(Unit unit, GridPosition gridPosition) => gridPosition.unitsList.Remove(unit);
-
-    public void ChangeGridPosition(GridPosition oldPosition, GridPosition newPosition, Unit unit)
+}
+public struct GridPosition
+{
+  public int X;
+  public int Z;
+ 
+    public GridPosition( int X, int Z)
     {
-        oldPosition.RemoveUnitAtGridPosition(unit, this);
-        newPosition.AddUnitAtGridPosition(unit, this);
+    this.X = X;
+    this.Z = Z; 
     }
-
+   
     public static bool operator != (GridPosition a, GridPosition b)
     {
-        return a.X != b.X || a.Z != b.Z;
+        return !(a == b);
     }
       public static bool operator == (GridPosition a, GridPosition b)
     {
-        return a.Z == b.Z && b.X == a.X;
+        return a.Z == b.Z && a.X == b.X;
     }
     public override bool Equals(object obj)
     {
@@ -129,11 +125,4 @@ public struct GridPosition
         return HashCode.Combine(Z,X);
     }
 
-    public int GetUnitListCount()
-    {
-        return unitsList.Count;
-    }
-
-   
-    
 }

@@ -11,6 +11,7 @@ public event Action<Vector3> OnWalkingValue;
 public event EventHandler OnSelectTrue;
 private float stopDistance = .1f;
 private GridPosition gridPosition;
+private GridPosition newPosition;
 
     private void Awake()
     {
@@ -19,8 +20,9 @@ private GridPosition gridPosition;
     void Start()
     {
         HandlerSelection.Instance.OnAtualSelect += ChangeVisual;
-        gridPosition = LevelGrid.meuGrid.GetGridPosition(transform.position);
-        gridPosition.AddUnitAtGridPosition(this, gridPosition);
+        gridPosition = LevelGrid.Instance.meuGrid.GetGridPosition(transform.position);
+        LevelGrid.Instance.AddUnitAtGridPosition(this, gridPosition);
+        
     }
 
     private void ChangeVisual(bool SelectVisual)
@@ -31,13 +33,25 @@ private GridPosition gridPosition;
     void Update()
     {
     var moveDir = (destination - transform.position).normalized;
+    newPosition = LevelGrid.Instance.meuGrid.GetGridPosition(transform.position);
+    
+    if(gridPosition != newPosition)
+        {
+            LevelGrid.Instance.ChangeGridPosition(gridPosition, newPosition, this);
+            gridPosition = newPosition;
+        }
+    
 
-    if (Vector3.Distance(destination, transform.position) > stopDistance){
+    if (Vector3.Distance(destination, transform.position) > stopDistance)
+    {
+        
         transform.position += moveDir * Time.deltaTime * VDM;
-        gridPosition.ChangeGridPosition(gridPosition, LevelGrid.meuGrid.GetGridPosition(transform.position), this);
+        
+        
     }
-    else {
-
+    else
+    {
+        
         moveDir = Vector3.zero;
     }
     OnWalkingValue?.Invoke(moveDir);

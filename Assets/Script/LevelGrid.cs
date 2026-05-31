@@ -3,19 +3,38 @@ using UnityEngine;
 
 public class LevelGrid : MonoBehaviour
 {
-    static public GridSystem meuGrid;
+    public static LevelGrid Instance{get; private set;}
+
+    public GridSystem meuGrid;
     [SerializeField]private Transform textGridPrefab;
     
     
     void Awake()
     {
+        if(Instance != null && Instance != this){
+            Destroy(gameObject);
+            return;
+            
+        }
+        Instance = this;
         meuGrid = new GridSystem(9,9);
         meuGrid.GridTextAtGridSystem(textGridPrefab);
     }
-    private void Update()
-    {
-      Debug.Log(meuGrid.GetGridPosition(MouseWorld.Instance.GetWorldMousePosition().point).GetUnitListCount());
 
+    
+     public void AddUnitAtGridPosition(Unit unit, GridPosition gridPosition)
+    {
+        meuGrid.GetGridObject(gridPosition).GetUnitsList().Add(unit);
+    }
+    public void RemoveUnitAtGridPosition(Unit unit, GridPosition gridPosition)
+    {
+        meuGrid.GetGridObject(gridPosition).GetUnitsList().Remove(unit);
+    }
+
+    public void ChangeGridPosition(GridPosition oldPosition, GridPosition newPosition, Unit unit)
+    {
+        RemoveUnitAtGridPosition(unit, oldPosition);
+        AddUnitAtGridPosition(unit, newPosition);
     }
 }
   

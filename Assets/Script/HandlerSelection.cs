@@ -35,8 +35,9 @@ public static HandlerSelection Instance{get; private set;}
         }
 
     if(!unitSelect)return;
-    var position = LevelGrid.meuGrid.GetGridPosition(MouseWorld.Instance.GetWorldMousePosition(unitSelect.layerMaskGround).point);
-    unitSelect.Move(LevelGrid.meuGrid.GetWorldPosition(position.X,position.Z)); 
+    
+    var position = LevelGrid.Instance.meuGrid.GetGridPosition(MouseWorld.Instance.GetWorldMousePosition().point);
+    unitSelect.Move(LevelGrid.Instance.meuGrid.GetWorldPosition(position.X, position.Z)); 
 
     } 
         

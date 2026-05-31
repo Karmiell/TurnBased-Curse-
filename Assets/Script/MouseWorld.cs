@@ -18,9 +18,9 @@ public class MouseWorld : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-    public RaycastHit GetWorldMousePosition(LayerMask layerMask)
+    public RaycastHit GetWorldMousePosition( LayerMask layerMask = default)
     {
-        if(layerMask.IsUnityNull())layerMask = layerMaskDefaut;
+        if(layerMask == default)layerMask = layerMaskDefaut;
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         Physics.Raycast(ray, out RaycastHit hit, float.MaxValue, layerMask);
         return hit;

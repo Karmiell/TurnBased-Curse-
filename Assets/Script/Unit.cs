@@ -10,6 +10,7 @@ private Vector3 destination;
 public event Action<Vector3> OnWalkingValue;
 public event EventHandler OnSelectTrue;
 private float stopDistance = .1f;
+private GridPosition gridPosition;
 
     private void Awake()
     {
@@ -18,6 +19,8 @@ private float stopDistance = .1f;
     void Start()
     {
         HandlerSelection.Instance.OnAtualSelect += ChangeVisual;
+        gridPosition = LevelGrid.meuGrid.GetGridPosition(transform.position);
+        gridPosition.AddUnitAtGridPosition(this, gridPosition);
     }
 
     private void ChangeVisual(bool SelectVisual)
@@ -29,8 +32,14 @@ private float stopDistance = .1f;
     {
     var moveDir = (destination - transform.position).normalized;
 
-    if (Vector3.Distance(destination, transform.position) > stopDistance)transform.position += moveDir * Time.deltaTime * VDM;
-    else moveDir = Vector3.zero;
+    if (Vector3.Distance(destination, transform.position) > stopDistance){
+        transform.position += moveDir * Time.deltaTime * VDM;
+        gridPosition.ChangeGridPosition(gridPosition, LevelGrid.meuGrid.GetGridPosition(transform.position), this);
+    }
+    else {
+
+        moveDir = Vector3.zero;
+    }
     OnWalkingValue?.Invoke(moveDir);
             
     }
@@ -38,6 +47,7 @@ private float stopDistance = .1f;
     public void Move(Vector3 destination)
     {
     this.destination = destination;
+
     }
 
 }

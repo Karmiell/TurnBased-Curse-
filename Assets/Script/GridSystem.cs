@@ -1,14 +1,16 @@
+using System;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 
 public class GridSystem
 {
-    private LayerMask layerMask;
+
     private int altura;
     private int largura;
     private int tamanhoCelula;
 
-    private GridObject[,] grid;
+    public GridObject[,] grid;
     public GridSystem(int altura, int largura, int tamanhoCelula = 2)
     {
         this.altura = altura;
@@ -24,54 +26,114 @@ public class GridSystem
             for(int j = 0; j < largura; j++)
             {
                 GridPosition gridPosition = new GridPosition(i,j);
+                var WordPosition = GetWorldPosition(i,j);
                 grid[i,j] = new GridObject(this, gridPosition);
                 // acho que aqui deveria ter uma função como essa abaixo, mas isso tambem parece errado e nem sei como usaria esse Vector 3 ja que ele é baseado no mouse e fica mudando o tempo inteiro achei que devereria pegar 0 ponto 0,0,0 do mundo ou algo assim
-                var position = MouseWorld.Instance.GetWorldMousePosition(layerMask).point;
+                
 
             }
         }
 
     }
-    /*public GridPosition GetGridPosition(Vector3 position)
+    public GridPosition GetGridPosition(Vector3 WordPosition)
     {
-        //nao faço ideia de como tenho que usar esse Vector3 para retorna a posição exata dentro do grid mas lembro que existia alguma função parecida com essa
+        return grid[
+            Mathf.RoundToInt(WordPosition.x/tamanhoCelula), 
+            Mathf.RoundToInt(WordPosition.z/tamanhoCelula)].gridPosition;
+    }
+   public Vector3 GetWorldPosition(int X, int Z)
+    {
+        return new Vector3(X,0,Z) * tamanhoCelula;
+    }
     
+    public void GridTextAtGridSystem(Transform textTransform)
+    {
+           for(int i = 0; i < altura; i++)
+        {
+            for(int j = 0; j < largura; j++)
+            {
+                GameObject.Instantiate(textTransform,GetWorldPosition(i,j),Quaternion.identity);
 
-        return gridPosition;
-    }*/
-    
+            }
+        }
+    }
 }
+
 public class GridObject
 {
     //essa classe foi feita em um outro scipt no curso mas acho que nao tem problema fazer no mesmo, é mais facil para vizualizar tudo
-    public List<Unit> units;
+    
     private bool isWalkable;
-    private GridPosition gridPosition;
+    public GridPosition gridPosition;
     private GridSystem gridSystem;
+    
 
     public GridObject(GridSystem gridSystem, GridPosition gridPosition, bool isWalkable = true)
     {
         this.gridPosition = gridPosition;
         this.gridSystem = gridSystem;
-        units = new List<Unit>();
+        
 
         
     }
+   
 
 }
 public struct GridPosition
 {
-  private int X;
-  private int Z;
+  public int X;
+  public int Z;
+  private List<Unit> unitsList;
 
     public GridPosition( int X, int Z)
     {
     this.X = X;
     this.Z = Z;
+    unitsList = new List<Unit>();
     }
     public override string ToString()
     {
-        return $"X:{X}; Y:{Z}";
+        string listUnitString = "";
+        foreach(var atual in unitsList)
+        {
+            listUnitString += atual + "\n";
+        }
+        return $"X:{X}; Y:{Z}\n" + listUnitString;
     }
+
+    public void AddUnitAtGridPosition(Unit unit, GridPosition gridPosition) => gridPosition.unitsList.Add(unit);
+    public void RemoveUnitAtGridPosition(Unit unit, GridPosition gridPosition) => gridPosition.unitsList.Remove(unit);
+
+    public void ChangeGridPosition(GridPosition oldPosition, GridPosition newPosition, Unit unit)
+    {
+        oldPosition.RemoveUnitAtGridPosition(unit, this);
+        newPosition.AddUnitAtGridPosition(unit, this);
+    }
+
+    public static bool operator != (GridPosition a, GridPosition b)
+    {
+        return a.X != b.X || a.Z != b.Z;
+    }
+      public static bool operator == (GridPosition a, GridPosition b)
+    {
+        return a.Z == b.Z && b.X == a.X;
+    }
+    public override bool Equals(object obj)
+    {
+        if(!(obj is GridPosition))return false;
+        
+        return (GridPosition)obj == this;
+    }
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(Z,X);
+    }
+
+    public int GetUnitListCount()
+    {
+        return unitsList.Count;
+    }
+
+   
     
 }

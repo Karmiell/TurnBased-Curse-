@@ -1,6 +1,7 @@
 using Unity.VisualScripting;
 using UnityEngine;
 using System;
+using UnityEngine.InputSystem;
 
 public class HandlerSelection : MonoBehaviour
 {
@@ -25,18 +26,22 @@ public static HandlerSelection Instance{get; private set;}
 
     private void Update()
     {
-     if(Input.GetMouseButtonDown(0))
+     if(Mouse.current.leftButton.wasPressedThisFrame)
     {
     
     if(TryHandleSelection()){
         OnAtualSelect?.Invoke(TryHandleSelection());
         return;
         }
+
     if(!unitSelect)return;
-    unitSelect.Move(MouseWorld.Instance.GetWorldMousePosition(unitSelect.layerMaskGround).point);    
+    var position = LevelGrid.meuGrid.GetGridPosition(MouseWorld.Instance.GetWorldMousePosition(unitSelect.layerMaskGround).point);
+    unitSelect.Move(LevelGrid.meuGrid.GetWorldPosition(position.X,position.Z)); 
+
     } 
         
     }
+
     private bool TryHandleSelection()
     {
     var tryUnit = MouseWorld.Instance.GetWorldMousePosition(layerUnit).transform;

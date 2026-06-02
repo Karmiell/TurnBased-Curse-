@@ -1,0 +1,37 @@
+using Unity.VisualScripting;
+using UnityEngine;
+using UnityEngine.Animations;
+using UnityEngine.InputSystem;
+
+public class CameraInputHandler : MonoBehaviour
+{
+public static CameraInputHandler Instance;
+  InputSystem_Actions inputActionCamera;
+
+    private void Awake()
+    {
+        if(!Instance.IsUnityNull() && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
+
+        inputActionCamera = new InputSystem_Actions();
+    }
+    private void Start()
+    {
+        inputActionCamera.Enable();
+    }
+
+    public Vector2 GetCameraMovimentInputNormalized()
+    {
+        return inputActionCamera.Camera.Moviment.ReadValue<Vector2>();
+    }
+    public float GetCameraRotateInput()
+    {
+        return inputActionCamera.Camera.Rotate.ReadValue<float>();
+    }
+}
+

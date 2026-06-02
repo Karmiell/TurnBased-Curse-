@@ -1,5 +1,6 @@
 using UnityEngine;
 using Unity.Cinemachine;
+using Unity.Mathematics;
 
 
 public class CameraMoveHandler : MonoBehaviour
@@ -8,6 +9,8 @@ public class CameraMoveHandler : MonoBehaviour
     [SerializeField]private float rotateSpeed = 5f;
     [SerializeField]private CinemachineCamera cinemachineCamera;
     private float rotationFixedValue = 0f;
+    private float zoomInMax = 5f;
+    private float zoomOutMax = 60;
 
  
 
@@ -28,8 +31,9 @@ public class CameraMoveHandler : MonoBehaviour
     }
 
     private void ChangeFOV(float modifier)
-    {
-        cinemachineCamera.Lens.FieldOfView += modifier;
+    {  
+        cinemachineCamera.Lens.FieldOfView += modifier;  
+        cinemachineCamera.Lens.FieldOfView = math.clamp(cinemachineCamera.Lens.FieldOfView,zoomInMax,zoomOutMax);   
     }
     private void Move(Vector3 position)
     {

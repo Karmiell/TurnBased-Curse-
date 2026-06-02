@@ -577,7 +577,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   moveSpeed: 7
-  rotateSpeed: 5
+  rotateSpeed: 50
+  cinemachineCamera: {fileID: 259900290}
 --- !u!1 &364493731
 GameObject:
   m_ObjectHideFlags: 0
@@ -1027,7 +1028,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7477001151515834698, guid: bbb5ecf5ed8b7124a920394a6efb035a, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 2.03
+      value: 5.59
       objectReference: {fileID: 0}
     - target: {fileID: 7477001151515834698, guid: bbb5ecf5ed8b7124a920394a6efb035a, type: 3}
       propertyPath: m_LocalPosition.y
@@ -1035,7 +1036,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7477001151515834698, guid: bbb5ecf5ed8b7124a920394a6efb035a, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 1.96
+      value: 5.79
       objectReference: {fileID: 0}
     - target: {fileID: 7477001151515834698, guid: bbb5ecf5ed8b7124a920394a6efb035a, type: 3}
       propertyPath: m_LocalRotation.w

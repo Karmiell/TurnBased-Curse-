@@ -24,7 +24,15 @@ public static CameraInputHandler Instance;
     {
         inputActionCamera.Enable();
     }
+    void Update()
+    {
+        Debug.Log(GetCameraFOVModifier());
+    }
 
+    public float GetCameraFOVModifier()
+    {
+        return inputActionCamera.Camera.Zoom_InOut.ReadValue<float>();
+    }
     public Vector2 GetCameraMovimentInputNormalized()
     {
         return inputActionCamera.Camera.Moviment.ReadValue<Vector2>();

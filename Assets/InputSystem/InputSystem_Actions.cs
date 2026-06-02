@@ -109,6 +109,15 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""processors"": ""NormalizeVector2"",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Zoom_In/Out"",
+                    ""type"": ""Value"",
+                    ""id"": ""0137d04f-7752-4728-87fd-d88a53f36b67"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -199,6 +208,39 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""action"": ""Rotate"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""1D Axis"",
+                    ""id"": ""248a7e94-504b-4733-9a99-196c6fbef59f"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Zoom_In/Out"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""e9ade581-53ff-49f5-8476-7881fd4db71a"",
+                    ""path"": ""<Mouse>/scroll/up"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Zoom_In/Out"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""760636ce-0a15-4d2b-b9d4-308248192b75"",
+                    ""path"": ""<Mouse>/scroll/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Zoom_In/Out"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
                 }
             ]
         }
@@ -209,6 +251,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         m_Camera = asset.FindActionMap("Camera", throwIfNotFound: true);
         m_Camera_Rotate = m_Camera.FindAction("Rotate", throwIfNotFound: true);
         m_Camera_Moviment = m_Camera.FindAction("Moviment", throwIfNotFound: true);
+        m_Camera_Zoom_InOut = m_Camera.FindAction("Zoom_In/Out", throwIfNotFound: true);
     }
 
     ~@InputSystem_Actions()
@@ -291,6 +334,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
     private List<ICameraActions> m_CameraActionsCallbackInterfaces = new List<ICameraActions>();
     private readonly InputAction m_Camera_Rotate;
     private readonly InputAction m_Camera_Moviment;
+    private readonly InputAction m_Camera_Zoom_InOut;
     /// <summary>
     /// Provides access to input actions defined in input action map "Camera".
     /// </summary>
@@ -310,6 +354,10 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Camera/Moviment".
         /// </summary>
         public InputAction @Moviment => m_Wrapper.m_Camera_Moviment;
+        /// <summary>
+        /// Provides access to the underlying input action "Camera/Zoom_InOut".
+        /// </summary>
+        public InputAction @Zoom_InOut => m_Wrapper.m_Camera_Zoom_InOut;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -342,6 +390,9 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @Moviment.started += instance.OnMoviment;
             @Moviment.performed += instance.OnMoviment;
             @Moviment.canceled += instance.OnMoviment;
+            @Zoom_InOut.started += instance.OnZoom_InOut;
+            @Zoom_InOut.performed += instance.OnZoom_InOut;
+            @Zoom_InOut.canceled += instance.OnZoom_InOut;
         }
 
         /// <summary>
@@ -359,6 +410,9 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @Moviment.started -= instance.OnMoviment;
             @Moviment.performed -= instance.OnMoviment;
             @Moviment.canceled -= instance.OnMoviment;
+            @Zoom_InOut.started -= instance.OnZoom_InOut;
+            @Zoom_InOut.performed -= instance.OnZoom_InOut;
+            @Zoom_InOut.canceled -= instance.OnZoom_InOut;
         }
 
         /// <summary>
@@ -413,5 +467,12 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnMoviment(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Zoom_In/Out" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnZoom_InOut(InputAction.CallbackContext context);
     }
 }

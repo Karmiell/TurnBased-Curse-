@@ -7,10 +7,12 @@ public class CameraMoveHandler : MonoBehaviour
 {
     [SerializeField]private float moveSpeed = 5f;
     [SerializeField]private float rotateSpeed = 5f;
-    [SerializeField]private CinemachineCamera cinemachineCamera;
+    [SerializeField]private float zoomSpeed = 50f;
+    [SerializeField]private CinemachineCameraOffset cinemachineCamera;
     private float rotationFixedValue = 0f;
-    private float zoomInMax = 5f;
-    private float zoomOutMax = 60;
+
+    private float zoomInMaxZ = 8f;
+    private float zoomOutMaxZ = -10f;
 
  
 
@@ -23,17 +25,19 @@ public class CameraMoveHandler : MonoBehaviour
     var position = transform.forward * inputMove.y + transform.right * inputMove.x;
     var rotateInput = new Vector3(rotationFixedValue, inputRotate,rotationFixedValue);
 
-    ChangeFOV(CameraInputHandler.Instance.GetCameraFOVModifier());
+    ChangeZoom(CameraInputHandler.Instance.GetCameraFOVModifier());
     Move(position);
     Rotate(rotateInput);
     
         
     }
 
-    private void ChangeFOV(float modifier)
+    private void ChangeZoom(float modifier)
     {  
-        cinemachineCamera.Lens.FieldOfView += modifier;  
-        cinemachineCamera.Lens.FieldOfView = math.clamp(cinemachineCamera.Lens.FieldOfView,zoomInMax,zoomOutMax);   
+        if(modifier == 0f)return;
+       cinemachineCamera.Offset.z -= modifier * Time.deltaTime * zoomSpeed;
+       
+        cinemachineCamera.Offset.z = math.clamp(cinemachineCamera.Offset.z,zoomOutMaxZ,zoomInMaxZ);   
     }
     private void Move(Vector3 position)
     {

@@ -13,7 +13,7 @@ private const string IS_WALKING = "IsWalking";
     }
     void Start()
     {
-        moviment.OnWalkingValue += AnimationWalkingController;
+        moviment.GetActionMove().OnWalkingValue += AnimationWalkingController;
     }
 
     private void AnimationWalkingController(Vector3 moveDir)

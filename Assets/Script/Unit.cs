@@ -4,28 +4,32 @@ using UnityEngine;
 
 public class Unit : MonoBehaviour
 {
-[SerializeField]private float VDM = 5f;
-[SerializeField]public LayerMask layerMaskGround;
-[SerializeField]private List<ActionSO> actionSOList;
-private Vector3 destination;
-private Vector3 moveDir;
 
-public event Action<Vector3> OnWalkingValue;
-public event Action<List<ActionSO>> OnActionsAvalible;
+[SerializeField]public LayerMask layerMaskGround;
+
+
 public event EventHandler OnSelectTrue;
-private float stopDistance = .1f;
+
+
+private BaseAction[] ActionsAvalibleArray;
+private ActionMove actionMove;
 private GridPosition gridPosition;
 private GridPosition newPosition;
 
+
+
     private void Awake()
     {
-        destination = transform.position;
+        actionMove = GetComponent<ActionMove>();
+        ActionsAvalibleArray = GetComponents<BaseAction>();
     }
+
     void Start()
     {
         HandlerSelection.Instance.OnAtualSelect += ChangeVisual;
         gridPosition = LevelGrid.Instance.meuGrid.GetGridPosition(transform.position);
         LevelGrid.Instance.AddUnitAtGridPosition(this, gridPosition);
+        
         
     }
 
@@ -36,20 +40,13 @@ private GridPosition newPosition;
 
     void Update()
     {
-    moveDir = (destination - transform.position).normalized;
     newPosition = LevelGrid.Instance.meuGrid.GetGridPosition(transform.position);
     
-    GridMoviment();
-    Movement();
-
-    OnWalkingValue?.Invoke(moveDir);      
+    
+    GridMoviment();   
     }
 
-    public void Move(Vector3 destination)
-    {
-    this.destination = destination;
-    }
-
+    public ActionMove GetActionMove() => actionMove;
     public void GridMoviment()
     {
         if(gridPosition != newPosition)
@@ -59,14 +56,7 @@ private GridPosition newPosition;
         }
     }
 
-    public void Movement()
-    {        
-    if (Vector3.Distance(destination, transform.position) > stopDistance)transform.position += moveDir * Time.deltaTime * VDM; 
-    else moveDir = Vector3.zero;
-    }
-
-    public void ShowActionAvalible()
-    {
-        OnActionsAvalible?.Invoke(actionSOList);
-    }
+    public BaseAction[] GetBaseActionsArray() => ActionsAvalibleArray;
+ 
+    public GridPosition GetGridPosition() => gridPosition;
 }

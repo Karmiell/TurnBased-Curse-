@@ -1,12 +1,18 @@
 using UnityEngine;
 using System;
+using System.Collections.Generic;
 
-public class ActionHeal : BaseAction, ActionInterface
+public class ActionHeal : BaseAction
 {
-    public event EventHandler<ActionInterface.OnStateChangeEventArgs> OnStateChange;
-
-    public override void ActionInteract()
+    public override void SetValidGridPositionList(GridPosition gridPosition)
     {
-       OnStateChange?.Invoke(this, new ActionInterface.OnStateChangeEventArgs(){ actionType = BaseAction.State.Healing});
+        throw new NotImplementedException();
+    }
+    public override void ClearList()
+    {
+        
+    }
+    public override void ActionInteract(GridPosition gridPosition, Action action)
+    {
     }
 }

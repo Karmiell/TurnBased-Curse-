@@ -24,10 +24,6 @@ public static CameraInputHandler Instance;
     {
         inputActionCamera.Enable();
     }
-    void Update()
-    {
-        Debug.Log(GetCameraFOVModifier());
-    }
 
     public float GetCameraFOVModifier()
     {

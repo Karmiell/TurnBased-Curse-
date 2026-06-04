@@ -61,6 +61,15 @@ public class GridSystem
     {
         return grid[gridPosition.X, gridPosition.Z];
     }
+    public bool ValidGridPosition(GridPosition gridPosition)
+    {
+        if(gridPosition.X >= 0 && gridPosition.X <= largura &&
+           gridPosition.Z >= 0 && gridPosition.Z <= altura &&
+           GetGridObject(gridPosition).HasNotUnit())return true;
+        return false;
+    }
+    public int GetAltura() => altura;
+    public int GetLargura() => largura;
 }
 
 public class GridObject
@@ -93,6 +102,7 @@ public class GridObject
         return $"X:{gridPosition.X}; Y:{gridPosition.Z}\n" + listUnitString;
     }
     public List<Unit> GetUnitsList() => unitsList;
+    public bool HasNotUnit() => unitsList.Count == 0;
 
 }
 public struct GridPosition
@@ -123,6 +133,14 @@ public struct GridPosition
     public override int GetHashCode()
     {
         return HashCode.Combine(Z,X);
+    }
+    public static GridPosition operator +(GridPosition a, GridPosition b)
+    {
+        return new GridPosition(a.X + b.X, a.Z + b.Z);
+    }
+     public static GridPosition operator -(GridPosition a, GridPosition b)
+    {
+        return new GridPosition(a.X - b.X, a.Z - b.Z);
     }
 
 }

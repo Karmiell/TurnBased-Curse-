@@ -1,12 +1,18 @@
 using UnityEngine;
 using System;
+using System.Collections.Generic;
 
-public class ActionAttack : BaseAction, ActionInterface
+public class ActionAttack : BaseAction
 {
-    public event EventHandler<ActionInterface.OnStateChangeEventArgs> OnStateChange;
-
-    public override void ActionInteract()
+        public override void SetValidGridPositionList(GridPosition gridPosition)
     {
-       OnStateChange?.Invoke(this, new ActionInterface.OnStateChangeEventArgs(){ actionType = BaseAction.State.Attacking});
+        throw new NotImplementedException();
+    }
+     public override void ClearList()
+    {
+        
+    }
+ public override void ActionInteract(GridPosition gridPosition, Action action)
+    {
     }
 }

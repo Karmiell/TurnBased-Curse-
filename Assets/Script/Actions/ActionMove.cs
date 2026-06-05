@@ -56,8 +56,8 @@ public class ActionMove : BaseAction
     {
         ClearList();
         moveDir = Vector3.zero;
-        
         startAction = false;
+
         OnActionComplete();
     }
     }
@@ -90,5 +90,6 @@ public class ActionMove : BaseAction
         validGridPositonList = new List<GridPosition>();
     }
     public override List<GridPosition> GetGridPositionList() => validGridPositonList;
+
      
 }

@@ -24,10 +24,7 @@ public class visualGrid : MonoBehaviour
         HideAllObject(visualGridSingleArray);
     }
 
-    private void Update()
-    {
-        ShowAllObjectAtListAtualAction(visualGridSingleArray, HandlerSelection.Instance.GetSelectAction().GetGridPositionList());
-    }
+
     private void HandlerSelection_OnActionSelectChange ( object sendler, EventArgs e)
     {
         UpdateVisualObject(visualGridSingleArray);
@@ -41,13 +38,11 @@ public class visualGrid : MonoBehaviour
 
     public void ShowAllObjectAtListAtualAction(VisualGridSingle[,] visualGridSingles, List<GridPosition> gridPositions = default)
     {
-        for (int i = 0; i < gridPositions.Count; i++)
+        for (int j = 0; j < gridPositions.Count; j++)
         {
-            for (int j = 0; j < gridPositions.Count; j++)
-            {
-               visualGridSingles[gridPositions[j].X,gridPositions[j].Z].Show();
-            }
+        visualGridSingles[gridPositions[j].X,gridPositions[j].Z].Show();
         }
+        
     }
     public void HideAllObject(VisualGridSingle[,] visualGridSingles)
     {

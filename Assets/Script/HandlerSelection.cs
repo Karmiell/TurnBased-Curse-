@@ -8,7 +8,7 @@ public class HandlerSelection : MonoBehaviour
 
 public static HandlerSelection Instance{get; private set;}
  private Unit unitSelect;
- private BaseAction actionSelect;
+ private ActionMove actionSelect;
 private bool isBusy;
 
  public event Action<bool> OnAtualSelect;
@@ -29,12 +29,6 @@ private bool isBusy;
         DontDestroyOnLoad(gameObject);
     }
 
-    private void Start()
-    {
-        unitSelect = FindAnyObjectByType<Unit>();
-        OnAtualSelect?.Invoke(true);
-        actionSelect = unitSelect.GetActionMove();
-    }
 
     private void Update()
     {
@@ -42,30 +36,36 @@ private bool isBusy;
 
      if(Mouse.current.leftButton.wasPressedThisFrame)
     {
-    if(!unitSelect.IsUnityNull()){
-        actionSelect = unitSelect.GetActionMove();
-        OnActionSelectChangeVisual?.Invoke(this, EventArgs.Empty);
-        SetBusy();
-    }
-    if(TryHandleSelection()){
-        OnAtualSelect?.Invoke(TryHandleSelection());
-        ClearBusy();
-        return;
-        }
-    
-    if(!unitSelect)return;
+    if(TryHandleSelection())
+    {
 
+    OnAtualSelect?.Invoke(true);
+
+    actionSelect = unitSelect.GetActionMove();
     actionSelect.SetValidGridPositionList(unitSelect.GetGridPosition());
+    OnActionSelectChangeVisual?.Invoke(this, EventArgs.Empty);
+
+    ClearBusy();
+    return;
+    }
+    if(!unitSelect)return;
+    
+
     var position = LevelGrid.Instance.meuGrid.GetGridPosition(MouseWorld.Instance.GetWorldMousePosition().point);
 
     if(actionSelect.ValidGridPosition(position))
     {
+    SetBusy();
     actionSelect.ActionInteract(position, ClearBusy); 
+    
     }
-    ClearBusy();
+    else ClearBusy();
+    actionSelect.SetValidGridPositionList(unitSelect.GetGridPosition());
+    OnActionSelectChangeVisual?.Invoke(this,EventArgs.Empty);
     } 
         
     }
+
 
     private bool TryHandleSelection()
     {
@@ -86,8 +86,12 @@ private bool isBusy;
     public Unit GetSelectUnit() => unitSelect;
     public BaseAction GetSelectAction() => actionSelect;
 
-    private void SetBusy()  {
-        OnActionSelectChangeVisual?.Invoke(this, EventArgs.Empty);
+    private void SetBusy() 
+    {
         isBusy = true;
-}    private void ClearBusy() => isBusy = false;
+    }    
+        private void ClearBusy() 
+    {
+        isBusy = false;
+    }
 }

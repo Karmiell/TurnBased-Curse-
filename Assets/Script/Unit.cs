@@ -42,7 +42,6 @@ private GridPosition newPosition;
     {
     newPosition = LevelGrid.Instance.meuGrid.GetGridPosition(transform.position);
     
-    
     GridMoviment();   
     }
 

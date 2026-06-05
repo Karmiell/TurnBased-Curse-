@@ -26,7 +26,6 @@ public class GridSystem
             for(int j = 0; j < largura; j++)
             {
                 GridPosition gridPosition = new GridPosition(i,j);
-                var WordPosition = GetWorldPosition(i,j);
                 grid[i,j] = new GridObject(this, gridPosition);
                 // acho que aqui deveria ter uma função como essa abaixo, mas isso tambem parece errado e nem sei como usaria esse Vector 3 ja que ele é baseado no mouse e fica mudando o tempo inteiro achei que devereria pegar 0 ponto 0,0,0 do mundo ou algo assim
                 
@@ -63,8 +62,8 @@ public class GridSystem
     }
     public bool ValidGridPosition(GridPosition gridPosition)
     {
-        if(gridPosition.X >= 0 && gridPosition.X <= largura &&
-           gridPosition.Z >= 0 && gridPosition.Z <= altura &&
+        if(gridPosition.X >= 0 && gridPosition.X < largura &&
+           gridPosition.Z >= 0 && gridPosition.Z < altura &&
            GetGridObject(gridPosition).HasNotUnit())return true;
         return false;
     }

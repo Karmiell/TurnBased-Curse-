@@ -18,6 +18,7 @@ private GridPosition newPosition;
 
 
 
+
     private void Awake()
     {
         actionMove = GetComponent<ActionMove>();

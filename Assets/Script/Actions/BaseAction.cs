@@ -13,6 +13,7 @@ public abstract class BaseAction : MonoBehaviour
     public abstract void SetValidGridPositionList(GridPosition gridPosition);
     public abstract void ClearList();
     public virtual List<GridPosition> GetGridPositionList() => validGridPositonList = new List<GridPosition>();
+    public abstract string GetNameAction();
   
    
 

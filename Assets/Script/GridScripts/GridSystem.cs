@@ -60,11 +60,17 @@ public class GridSystem
     {
         return grid[gridPosition.X, gridPosition.Z];
     }
-    public bool ValidGridPosition(GridPosition gridPosition)
+    public bool ValidGridPositionAll(GridPosition gridPosition)
     {
         if(gridPosition.X >= 0 && gridPosition.X < largura &&
            gridPosition.Z >= 0 && gridPosition.Z < altura &&
            GetGridObject(gridPosition).HasNotUnit())return true;
+        return false;
+    }
+    public bool ValidGridPosition(GridPosition gridPosition)
+    {
+        if(gridPosition.X >= 0 && gridPosition.X < largura &&
+           gridPosition.Z >= 0 && gridPosition.Z < altura)return true;
         return false;
     }
     public int GetAltura() => altura;

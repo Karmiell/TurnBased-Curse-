@@ -15,8 +15,6 @@ public class ActionMove : BaseAction
     private Vector3 moveDir;
     private Vector3 destination;
     private bool startAction = false;
-    
-
     private float stopDistance = .1f;
 
     private Unit unit;
@@ -28,29 +26,32 @@ public class ActionMove : BaseAction
         unit = GetComponent<Unit>();
         destination = transform.position;
         moveDir = Vector3.zero;
-        validGridPositonList = new List<GridPosition>();
+        ClearList();
     }
 
     private void Update()
     {
+    if(!startAction)return;
+    Movement();
         
-        if(!startAction)return;
-        
-         moveDir = (destination - transform.position).normalized;
-         
-         Movement();
-        
-        OnWalkingValue?.Invoke(moveDir);  
+    OnWalkingValue?.Invoke(moveDir);  
     }
+
     public override void ActionInteract(GridPosition gridPosition, Action action)
     {
+        OnActionComplete = action;
+    if(!ValidGridPosition(gridPosition)){
+        OnActionComplete();
+        return;
+    }
     this.destination = LevelGrid.Instance.meuGrid.GetWorldPosition(gridPosition.X,gridPosition.Z);
-    OnActionComplete = action;
+    
     startAction = true;
 
     }
     public void Movement()
-    {        
+    {
+    moveDir = (destination - transform.position).normalized;        
     if (Vector3.Distance(destination, transform.position) > stopDistance)transform.position += moveDir * Time.deltaTime * VDM; 
     else
     {
@@ -78,7 +79,7 @@ public class ActionMove : BaseAction
                 var gridPosition = new GridPosition(i,j);
                 var testValidPosition = gridPosition + atualGridPosition;
                 if(testValidPosition == atualGridPosition || 
-                !LevelGrid.Instance.meuGrid.ValidGridPosition(testValidPosition))continue;
+                !LevelGrid.Instance.meuGrid.ValidGridPositionAll(testValidPosition))continue;
                 gridPositionAtualList.Add(testValidPosition);
             }
         }
@@ -90,6 +91,6 @@ public class ActionMove : BaseAction
         validGridPositonList = new List<GridPosition>();
     }
     public override List<GridPosition> GetGridPositionList() => validGridPositonList;
-
+    public override string GetNameAction() => "Move";
      
 }

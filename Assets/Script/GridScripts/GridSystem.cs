@@ -83,7 +83,7 @@ public class GridObject
     private bool isWalkable;
     public GridPosition gridPosition;
     private GridSystem gridSystem;
-     private List<Unit> unitsList;
+    private List<Unit> unitsList;
     
     
 

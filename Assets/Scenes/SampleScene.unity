@@ -149,7 +149,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 8, y: 0, z: 8}
   m_LocalScale: {x: 1.8, y: 1.8, z: 1.8}
-  m_ConstrainProportionsScale: 1
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 466458201}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1156,6 +1156,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ActionMove
   VDM: 5
+--- !u!114 &789327694
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 721225005}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b492478c7f7424747b8dd415572e38b5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ActionAttack
 --- !u!1 &826852348
 GameObject:
   m_ObjectHideFlags: 0
@@ -2467,6 +2479,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 6670178082262584337, guid: bbb5ecf5ed8b7124a920394a6efb035a, type: 3}
       insertIndex: -1
       addedObject: {fileID: 789327691}
+    - targetCorrespondingSourceObject: {fileID: 6670178082262584337, guid: bbb5ecf5ed8b7124a920394a6efb035a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 789327694}
   m_SourcePrefab: {fileID: 100100000, guid: bbb5ecf5ed8b7124a920394a6efb035a, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:

@@ -13,33 +13,36 @@ public class ActionHeal : BaseAction
     private GridPosition gridPosition;
 
 
-    private void Update()
+    private void HealAction()
     {
-        if(!actionStart)return;
-        if(!Mouse.current.leftButton.wasPressedThisFrame)return;
+        if(actionStart)
+        {
+        actionStart = false;
+            
         var position = LevelGrid.Instance.meuGrid.GetWorldPosition(gridPosition.X,gridPosition.Z);
         tempObject = Instantiate(visualHealing,position,Quaternion.identity);
-        Invoke("Destroy", 2f);
-        
+        EndAction();
+        }
     }
 
-    private void Destroy()
+    private void EndAction()
     {
-        Destroy(tempObject);
         ClearList();
         OnActionComplete();
     }
     public override void ActionInteract( GridPosition gridPosition, Action action)
     {
         OnActionComplete = action;
+
         if(!ValidGridPosition(gridPosition))
         {
             OnActionComplete();
             return;
         }
-        this.gridPosition = gridPosition;
         
+        this.gridPosition = gridPosition;
         actionStart = true;
+        HealAction();
     }
 
     public override bool ValidGridPosition(GridPosition gridPosition)
@@ -48,18 +51,19 @@ public class ActionHeal : BaseAction
     }
     public override void SetValidGridPositionList(GridPosition gridPosition)
     {
-        int maxRange = 2;
+        int maxRange = 5;
         var tempList = new List<GridPosition>();
-        for (int i = -maxRange ; i < maxRange ; i++)
+        for (int i = -maxRange ; i <= maxRange ; i++)
         {
-            for (int j = -maxRange; j < maxRange ; j++)
+            for (int j = -maxRange; j <= maxRange ; j++)
             {
-                var testPosition = new GridPosition(i,j) + gridPosition;
+                var newGridPosition =  new GridPosition(i,j);
+                var testPosition = newGridPosition + gridPosition;
+
                 if(!LevelGrid.Instance.meuGrid.ValidGridPosition(testPosition))continue;
-                if (!LevelGrid.Instance.meuGrid.GetGridObject(testPosition).HasNotUnit())
-                {
-                    tempList.Add(testPosition);
-                } 
+                if (LevelGrid.Instance.HasNotUnitAtGridPosition(testPosition))continue;
+                
+                tempList.Add(testPosition);   
             }
         }
         validGridPositonList = tempList;
@@ -69,7 +73,7 @@ public class ActionHeal : BaseAction
         validGridPositonList = new List<GridPosition>();
     }
     public override List<GridPosition> GetGridPositionList() {
-        return validGridPositonList = new List<GridPosition>();
+        return validGridPositonList;
     }
     public override string GetNameAction() => "Heal";
 }

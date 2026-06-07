@@ -36,5 +36,6 @@ public class LevelGrid : MonoBehaviour
         RemoveUnitAtGridPosition(unit, oldPosition);
         AddUnitAtGridPosition(unit, newPosition);
     }
+    public bool HasNotUnitAtGridPosition(GridPosition gridPosition) => meuGrid.GetGridObject(gridPosition).HasNotUnit();
 }
   

@@ -3,6 +3,8 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
+using Unity.Mathematics;
 
 public class ActionMove : BaseAction
 {
@@ -11,6 +13,9 @@ public class ActionMove : BaseAction
 
     public event Action<Vector3> OnWalkingValue;
 
+
+private int moveDistance;
+private int lastMoveDistance;
 
     private Vector3 moveDir;
     private Vector3 destination;
@@ -44,20 +49,24 @@ public class ActionMove : BaseAction
         OnActionComplete();
         return;
     }
-    this.destination = LevelGrid.Instance.meuGrid.GetWorldPosition(gridPosition.X,gridPosition.Z);
+    destination = LevelGrid.Instance.meuGrid.GetWorldPosition(gridPosition.X,gridPosition.Z);
+    DistanceMoved(destination, transform.position);
     
     startAction = true;
 
     }
     public void Movement()
     {
-    moveDir = (destination - transform.position).normalized;        
+    moveDir = (destination - transform.position).normalized;
+            
     if (Vector3.Distance(destination, transform.position) > stopDistance)transform.position += moveDir * Time.deltaTime * VDM; 
     else
     {
         ClearList();
         moveDir = Vector3.zero;
         startAction = false;
+        lastMoveDistance = moveDistance;
+        moveDistance = 0; 
 
         OnActionComplete();
     }
@@ -76,10 +85,12 @@ public class ActionMove : BaseAction
         {
             for (int j = -maxMoveDistance ; j <= maxMoveDistance; j++)
             {
+                if(math.abs(i + j) > maxMoveDistance || -(i - j) < -maxMoveDistance || (i - j) < -maxMoveDistance)continue;
                 var gridPosition = new GridPosition(i,j);
                 var testValidPosition = gridPosition + atualGridPosition;
                 if(testValidPosition == atualGridPosition || 
                 !LevelGrid.Instance.meuGrid.ValidGridPositionAll(testValidPosition))continue;
+                
                 gridPositionAtualList.Add(testValidPosition);
             }
         }
@@ -92,5 +103,14 @@ public class ActionMove : BaseAction
     }
     public override List<GridPosition> GetGridPositionList() => validGridPositonList;
     public override string GetNameAction() => "Move";
+    public override int ActionCost()
+    {
+        return lastMoveDistance;
+    }
+    private void DistanceMoved(Vector3 destino, Vector3 atualPosition)
+    {
+        var gridPositionValue = LevelGrid.Instance.meuGrid.GetGridPosition(destino) - LevelGrid.Instance.meuGrid.GetGridPosition(atualPosition);
+        moveDistance = math.abs(gridPositionValue.X + gridPositionValue.Z);
+    }
      
 }

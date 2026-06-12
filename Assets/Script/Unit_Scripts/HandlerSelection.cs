@@ -49,6 +49,7 @@ private bool isBusy;
         if (Mouse.current.leftButton.wasPressedThisFrame)
         {
             if(actionSelect.IsUnityNull())return;
+            if(!unitSelect.TryDoAction(actionSelect))return;
             SetBusy();
             var position = LevelGrid.Instance.meuGrid.GetGridPosition(MouseWorld.Instance.GetWorldMousePosition().point);
             actionSelect.ActionInteract(position,ClearBusy);

@@ -2,6 +2,7 @@ using UnityEngine;
 using System;
 using System.Collections.Generic;
 using UnityEngine.InputSystem;
+using Unity.Mathematics;
 
 public class ActionAttack : BaseAction
 {
@@ -53,6 +54,7 @@ public class ActionAttack : BaseAction
         {
             for (int j = -minRange; j <= minRange ; j++)
             {
+                if(math.abs(i + j) > minRange || -(i - j) < -minRange || (i - j) < -minRange)continue;
                 var newGridPosition =  new GridPosition(i,j);
                 var testPosition = newGridPosition + gridPosition;
                 tempListNoN.Add(testPosition);
@@ -63,6 +65,7 @@ public class ActionAttack : BaseAction
         {
             for (int j = -maxRange; j <= maxRange ; j++)
             {
+                if(math.abs(i + j) > maxRange || -(i - j) < -maxRange || (i - j) < -maxRange)continue;
                 var newGridPosition =  new GridPosition(i,j);
                 var testPosition = newGridPosition + gridPosition;
 

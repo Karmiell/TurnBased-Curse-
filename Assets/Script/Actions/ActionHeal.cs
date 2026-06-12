@@ -76,4 +76,6 @@ public class ActionHeal : BaseAction
         return validGridPositonList;
     }
     public override string GetNameAction() => "Heal";
+    public override int ActionCost() => 2;
+    
 }

@@ -9,18 +9,24 @@ public class Unit : MonoBehaviour
 
 
 public event EventHandler OnSelectTrue;
+public event EventHandler OnPointsChange;
 
 
 private BaseAction[] ActionsAvalibleArray;
 private ActionMove actionMove;
 private GridPosition gridPosition;
 private GridPosition newPosition;
+private int actionsPoint;
+private int movePoins;
+
 
 
 
 
     private void Awake()
     {
+        actionsPoint = 5;
+        movePoins = 6;
         actionMove = GetComponent<ActionMove>();
         ActionsAvalibleArray = GetComponents<BaseAction>();
     }
@@ -59,4 +65,35 @@ private GridPosition newPosition;
     public BaseAction[] GetBaseActionsArray() => ActionsAvalibleArray;
  
     public GridPosition GetGridPosition() => gridPosition;
+    public int GetActionPoint() => actionsPoint;
+    public bool TryDoAction(BaseAction baseAction)
+    {
+     if(baseAction is ActionMove)
+        {
+            if(baseAction.ActionCost() < movePoins)
+            {
+            SubSetMovePoint(baseAction.ActionCost());
+            return true;
+            }
+        }
+        else
+        {
+            if(baseAction.ActionCost() < actionsPoint)
+            {
+                SubSetActionPoint(baseAction.ActionCost());
+                return true;
+            }
+        }
+        return false;
+    }
+    private void SubSetMovePoint(int cost)
+    {
+        movePoins -= cost;
+        OnPointsChange?.Invoke(this, EventArgs.Empty);
+    }
+    private void SubSetActionPoint(int cost)
+    {
+        actionsPoint -= cost;
+        OnPointsChange?.Invoke(this, EventArgs.Empty);
+    }
 }

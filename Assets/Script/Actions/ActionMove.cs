@@ -50,7 +50,7 @@ private int lastMoveDistance;
         return;
     }
     destination = LevelGrid.Instance.meuGrid.GetWorldPosition(gridPosition.X,gridPosition.Z);
-    DistanceMoved(destination, transform.position);
+  
     
     startAction = true;
 
@@ -65,7 +65,6 @@ private int lastMoveDistance;
         ClearList();
         moveDir = Vector3.zero;
         startAction = false;
-        lastMoveDistance = moveDistance;
         moveDistance = 0; 
 
         OnActionComplete();
@@ -107,10 +106,15 @@ private int lastMoveDistance;
     {
         return lastMoveDistance;
     }
-    private void DistanceMoved(Vector3 destino, Vector3 atualPosition)
+
+    public override int SetCostAtGridPosition(GridPosition destino, GridPosition origem)
     {
-        var gridPositionValue = LevelGrid.Instance.meuGrid.GetGridPosition(destino) - LevelGrid.Instance.meuGrid.GetGridPosition(atualPosition);
-        moveDistance = math.abs(gridPositionValue.X + gridPositionValue.Z);
+        var gridPositionValue = origem - destino;
+
+        int cost = math.abs(gridPositionValue.X) + math.abs(gridPositionValue.Z);
+        lastMoveDistance = cost;
+
+        return cost;
     }
      
 }

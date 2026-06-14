@@ -6,6 +6,9 @@ public class Unit : MonoBehaviour
 {
 
 [SerializeField]public LayerMask layerMaskGround;
+[SerializeField]private bool isEnemy;
+[SerializeField]private int maxPointsMove = 6;
+[SerializeField]private int maxPointsActions = 5;
 
 
 public event EventHandler OnSelectTrue;
@@ -25,8 +28,7 @@ private int movePoins;
 
     private void Awake()
     {
-        actionsPoint = 5;
-        movePoins = 6;
+       ResetPoints();
         actionMove = GetComponent<ActionMove>();
         ActionsAvalibleArray = GetComponents<BaseAction>();
     }
@@ -34,10 +36,17 @@ private int movePoins;
     void Start()
     {
         HandlerSelection.Instance.OnAtualSelect += ChangeVisual;
+        TurnSystem.Instance.OnTurnChange += TurnSystem_OnTurnChange;
+
         gridPosition = LevelGrid.Instance.meuGrid.GetGridPosition(transform.position);
         LevelGrid.Instance.AddUnitAtGridPosition(this, gridPosition);
-        
-        
+      
+    }
+private void TurnSystem_OnTurnChange(object sender, EventArgs e)
+    {
+        if(isEnemy && TurnSystem.Instance.GetUnitTurnBool())return;
+        if(!isEnemy && !TurnSystem.Instance.GetUnitTurnBool())return;
+        ResetPoints();
     }
 
     private void ChangeVisual(bool SelectVisual)
@@ -66,11 +75,11 @@ private int movePoins;
  
     public GridPosition GetGridPosition() => gridPosition;
     public int GetActionPoint() => actionsPoint;
-    public bool TryDoAction(BaseAction baseAction)
+    public bool TryDoAction(BaseAction baseAction, GridPosition gridPosition)
     {
      if(baseAction is ActionMove)
         {
-            if(baseAction.ActionCost() < movePoins)
+            if(baseAction.SetCostAtGridPosition(gridPosition, GetGridPosition()) <= movePoins)
             {
             SubSetMovePoint(baseAction.ActionCost());
             return true;
@@ -96,4 +105,11 @@ private int movePoins;
         actionsPoint -= cost;
         OnPointsChange?.Invoke(this, EventArgs.Empty);
     }
+    private void ResetPoints()
+    {
+    actionsPoint = maxPointsActions;
+    movePoins = maxPointsMove;
+    }
+
+    public bool HasEnemy() => isEnemy;
 }

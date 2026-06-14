@@ -39,7 +39,6 @@ private bool isBusy;
     if(TryHandleSelection())return;
     
     HandleActionSelect();
-
     }
         
     
@@ -48,10 +47,12 @@ private bool isBusy;
     {
         if (Mouse.current.leftButton.wasPressedThisFrame)
         {
-            if(actionSelect.IsUnityNull())return;
-            if(!unitSelect.TryDoAction(actionSelect))return;
-            SetBusy();
             var position = LevelGrid.Instance.meuGrid.GetGridPosition(MouseWorld.Instance.GetWorldMousePosition().point);
+            if(actionSelect.IsUnityNull())return;
+            if(TurnSelection(unitSelect))return;
+            if(!unitSelect.TryDoAction(actionSelect, position))return;
+
+            SetBusy();
             actionSelect.ActionInteract(position,ClearBusy);
 
             
@@ -66,6 +67,7 @@ private bool isBusy;
     
     if(tryUnit.TryGetComponent<Unit>(out var result)){
         if(result == unitSelect)return false;
+        if(result.HasEnemy())return false;
         SetUnitSelect(result);
         SetActionSelect(unitSelect.GetActionMove());
         return true;
@@ -99,6 +101,13 @@ private bool isBusy;
         actionSelect = baseAction;
         actionSelect.SetValidGridPositionList(unitSelect.GetGridPosition());
         OnActionSelectChangeVisual?.Invoke(this,EventArgs.Empty);
-    
+    }
+
+    private bool TurnSelection(Unit unit)
+    {
+        if(unit.HasEnemy() && TurnSystem.Instance.GetUnitTurnBool())return true;
+        if(!unit.HasEnemy() && !TurnSystem.Instance.GetUnitTurnBool())return true;
+
+        return false;
     }
 }

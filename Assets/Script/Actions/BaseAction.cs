@@ -15,6 +15,8 @@ public abstract class BaseAction : MonoBehaviour
     public virtual List<GridPosition> GetGridPositionList() => validGridPositonList = new List<GridPosition>();
     public abstract string GetNameAction();
     public virtual int ActionCost() => 1;
+    
+    public virtual int SetCostAtGridPosition(GridPosition destino, GridPosition origem) => 1;
   
    
 

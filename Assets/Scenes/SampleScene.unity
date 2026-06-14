@@ -2276,6 +2276,10 @@ PrefabInstance:
       value: Unit (Curandeiro)
       objectReference: {fileID: 0}
     - target: {fileID: 6940285035972557671, guid: bbb5ecf5ed8b7124a920394a6efb035a, type: 3}
+      propertyPath: maxPointsMove
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 6940285035972557671, guid: bbb5ecf5ed8b7124a920394a6efb035a, type: 3}
       propertyPath: layerMaskGround.m_Bits
       value: 64
       objectReference: {fileID: 0}
@@ -2463,6 +2467,10 @@ PrefabInstance:
     - target: {fileID: 6670178082262584337, guid: bbb5ecf5ed8b7124a920394a6efb035a, type: 3}
       propertyPath: m_Name
       value: Unit(Guerreiro)
+      objectReference: {fileID: 0}
+    - target: {fileID: 6940285035972557671, guid: bbb5ecf5ed8b7124a920394a6efb035a, type: 3}
+      propertyPath: maxPointsMove
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 6940285035972557671, guid: bbb5ecf5ed8b7124a920394a6efb035a, type: 3}
       propertyPath: layerMaskGround.m_Bits

@@ -2,6 +2,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using System;
 using UnityEngine.InputSystem;
+using UnityEngine.EventSystems;
 
 public class HandlerSelection : MonoBehaviour
 {
@@ -47,6 +48,7 @@ private bool isBusy;
     {
         if (Mouse.current.leftButton.wasPressedThisFrame)
         {
+            if(EventSystem.current.IsPointerOverGameObject())return;
             var position = LevelGrid.Instance.meuGrid.GetGridPosition(MouseWorld.Instance.GetWorldMousePosition().point);
             if(actionSelect.IsUnityNull())return;
             if(TurnSelection(unitSelect))return;
@@ -62,6 +64,7 @@ private bool isBusy;
     private bool TryHandleSelection()
     {
     if(Mouse.current.leftButton.wasPressedThisFrame){
+    if(EventSystem.current.IsPointerOverGameObject())return false;
     var tryUnit = MouseWorld.Instance.GetWorldMousePosition(layerUnit).transform;
     if (tryUnit.IsUnityNull())return false;
     
@@ -98,6 +101,7 @@ private bool isBusy;
 
     public void SetActionSelect(BaseAction baseAction)
     {
+        //if(baseAction == actionSelect)return;
         actionSelect = baseAction;
         actionSelect.SetValidGridPositionList(unitSelect.GetGridPosition());
         OnActionSelectChangeVisual?.Invoke(this,EventArgs.Empty);
@@ -110,4 +114,5 @@ private bool isBusy;
 
         return false;
     }
+
 }

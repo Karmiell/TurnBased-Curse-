@@ -6,15 +6,13 @@ using System.Linq;
 using Unity.VisualScripting;
 using Unity.Mathematics;
 
+
 public class ActionMove : BaseAction
 {
-    [SerializeField]private float VDM = 5f;
+[SerializeField]private float VDM = 5f;
 
+public event Action<Vector3> OnWalkingValue;
 
-    public event Action<Vector3> OnWalkingValue;
-
-
-private int moveDistance;
 private int lastMoveDistance;
 
     private Vector3 moveDir;
@@ -28,6 +26,7 @@ private int lastMoveDistance;
 
    private void Awake()
     {
+
         unit = GetComponent<Unit>();
         destination = transform.position;
         moveDir = Vector3.zero;
@@ -65,7 +64,7 @@ private int lastMoveDistance;
         ClearList();
         moveDir = Vector3.zero;
         startAction = false;
-        moveDistance = 0; 
+        HandlerSelection.Instance.GetSelectUnit().SubSetMovePoint(ActionCost());
 
         OnActionComplete();
     }
@@ -78,7 +77,7 @@ private int lastMoveDistance;
 
     public override void SetValidGridPositionList(GridPosition atualGridPosition)
     {
-        int maxMoveDistance = 2;
+        int maxMoveDistance = unit.GetMovePoints();
         List<GridPosition> gridPositionAtualList = new List<GridPosition>();
         for (int i = -maxMoveDistance; i <= maxMoveDistance; i++)
         {
@@ -96,6 +95,8 @@ private int lastMoveDistance;
 
     validGridPositonList = gridPositionAtualList;
     }
+
+
      public override void ClearList()
     {
         validGridPositonList = new List<GridPosition>();

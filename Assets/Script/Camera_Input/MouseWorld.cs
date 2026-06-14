@@ -1,5 +1,6 @@
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class MouseWorld : MonoBehaviour
 {
@@ -20,6 +21,7 @@ public class MouseWorld : MonoBehaviour
 
     public RaycastHit GetWorldMousePosition( LayerMask layerMask = default)
     {
+        if(EventSystem.current.IsPointerOverGameObject())return default;
         if(layerMask == default)layerMask = layerMaskDefaut;
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         Physics.Raycast(ray, out RaycastHit hit, float.MaxValue, layerMask);

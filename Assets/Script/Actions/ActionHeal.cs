@@ -3,30 +3,40 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine.InputSystem;
+using UnityEngine.EventSystems;
 
 public class ActionHeal : BaseAction
 {
     [SerializeField]private GameObject visualHealing;
 
     private bool actionStart = false;
-    private GameObject tempObject;
     private GridPosition gridPosition;
 
+    private void Update()
+    {
+        HealAction();
+    }
 
     private void HealAction()
     {
         if(actionStart)
         {
-        actionStart = false;
-            
-        var position = LevelGrid.Instance.meuGrid.GetWorldPosition(gridPosition.X,gridPosition.Z);
-        tempObject = Instantiate(visualHealing,position,Quaternion.identity);
+        if(Mouse.current.leftButton.wasPressedThisFrame)
+        {
+        if(EventSystem.current.IsPointerOverGameObject())return;    
+        var position = LevelGrid.Instance.meuGrid.GetGridPosition(MouseWorld.Instance.GetWorldMousePosition().point);
+        if(!ValidGridPosition(position))return;
+
+        actionStart = false; 
+        Instantiate(visualHealing,LevelGrid.Instance.meuGrid.GetWorldPosition(position.X,position.Z),Quaternion.identity);
         EndAction();
+        }
         }
     }
 
     private void EndAction()
     {
+        HandlerSelection.Instance.GetSelectUnit().SubSetActionPoint(ActionCost());
         ClearList();
         OnActionComplete();
     }
@@ -42,7 +52,7 @@ public class ActionHeal : BaseAction
         
         this.gridPosition = gridPosition;
         actionStart = true;
-        HealAction();
+        
     }
 
     public override bool ValidGridPosition(GridPosition gridPosition)

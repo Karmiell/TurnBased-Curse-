@@ -81,30 +81,31 @@ private void TurnSystem_OnTurnChange(object sender, EventArgs e)
         {
             if(baseAction.SetCostAtGridPosition(gridPosition, GetGridPosition()) <= movePoins)
             {
-            SubSetMovePoint(baseAction.ActionCost());
             return true;
             }
         }
         else
         {
-            if(baseAction.ActionCost() < actionsPoint)
+            if(baseAction.ActionCost() <= actionsPoint)
             {
-                SubSetActionPoint(baseAction.ActionCost());
+               
                 return true;
             }
         }
         return false;
     }
-    private void SubSetMovePoint(int cost)
+    public void SubSetMovePoint(int cost)
     {
         movePoins -= cost;
         OnPointsChange?.Invoke(this, EventArgs.Empty);
     }
-    private void SubSetActionPoint(int cost)
+    public void SubSetActionPoint(int cost)
     {
         actionsPoint -= cost;
         OnPointsChange?.Invoke(this, EventArgs.Empty);
     }
+
+    public int GetMovePoints() => movePoins;
     private void ResetPoints()
     {
     actionsPoint = maxPointsActions;

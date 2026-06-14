@@ -3,6 +3,8 @@ using System;
 using System.Collections.Generic;
 using UnityEngine.InputSystem;
 using Unity.Mathematics;
+using UnityEngine.EventSystems;
+using UnityEngine.UIElements;
 
 public class ActionAttack : BaseAction
 {
@@ -12,7 +14,7 @@ public class ActionAttack : BaseAction
     {
         if (actionStart)
         {
-            if(AttackAction())return;           
+            AttackAction();        
     
         }
     }
@@ -27,17 +29,23 @@ public class ActionAttack : BaseAction
         }
         this.gridPosition = gridPosition;
         actionStart = true;
-        AttackAction();
     }
-    private bool AttackAction()
+    private void AttackAction()
     {
-        if(Keyboard.current.fKey.wasPressedThisFrame)
+       
+        if(Mouse.current.leftButton.wasPressedThisFrame)
         {
+            if(EventSystem.current.IsPointerOverGameObject())return;
+            var position = LevelGrid.Instance.meuGrid.GetGridPosition(MouseWorld.Instance.GetWorldMousePosition().point);
+            if(!ValidGridPosition(position))return;
+
             actionStart = false;
+            var gridObject = LevelGrid.Instance.meuGrid.GetGridObject(position);
+            Debug.Log($"Ataque em todo os elemetos presentes no GridObject: {gridObject.ToString()}");
+            HandlerSelection.Instance.GetSelectUnit().SubSetActionPoint(ActionCost());
             OnActionComplete();
-            return true;
         }
-        return false;
+       
     }
 
     public override bool ValidGridPosition(GridPosition gridPosition)

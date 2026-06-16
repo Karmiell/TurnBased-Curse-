@@ -16,7 +16,7 @@ public class GridSystem
         this.altura = altura;
         this.largura = largura;
 
-        //esse tamanhoCelula era usado em alguma multiplicação por um Vector 3 que veio do mouse, mas nao vejo como eu faria isso e nem onde colocaria o resultado dessa equação.
+        
         this.tamanhoCelula = tamanhoCelula;
 
         grid = new GridObject[altura,largura];
@@ -27,7 +27,7 @@ public class GridSystem
             {
                 GridPosition gridPosition = new GridPosition(i,j);
                 grid[i,j] = new GridObject(this, gridPosition);
-                // acho que aqui deveria ter uma função como essa abaixo, mas isso tambem parece errado e nem sei como usaria esse Vector 3 ja que ele é baseado no mouse e fica mudando o tempo inteiro achei que devereria pegar 0 ponto 0,0,0 do mundo ou algo assim
+                
                 
 
             }
@@ -77,22 +77,28 @@ public class GridSystem
     public int GetLargura() => largura;
 }
 
+
+
+
+
 public class GridObject
 {
     
-    private bool isWalkable;
+    
     public GridPosition gridPosition;
     private GridSystem gridSystem;
     private List<Unit> unitsList;
+    private List<IDamageble> damageblesList;
     
     
 
-    public GridObject(GridSystem gridSystem, GridPosition gridPosition, bool isWalkable = true)
+    public GridObject(GridSystem gridSystem, GridPosition gridPosition)
     {
         this.gridPosition = gridPosition;
         this.gridSystem = gridSystem;
         
         unitsList = new List<Unit>();
+        damageblesList = new List<IDamageble>();
         
     }
  
@@ -106,10 +112,16 @@ public class GridObject
         }
         return $"X:{gridPosition.X}; Y:{gridPosition.Z}\n" + listUnitString;
     }
+    public List<IDamageble> GetDamageblesList() => damageblesList;
     public List<Unit> GetUnitsList() => unitsList;
     public bool HasNotUnit() => unitsList.Count == 0;
 
 }
+
+
+
+
+
 public struct GridPosition
 {
   public int X;
@@ -147,5 +159,7 @@ public struct GridPosition
     {
         return new GridPosition(a.X - b.X, a.Z - b.Z);
     }
+    public int GetX() => X;
+    public int GetZ() => Z;
 
 }

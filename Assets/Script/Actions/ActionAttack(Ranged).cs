@@ -41,11 +41,19 @@ public class ActionAttack : BaseAction
 
             actionStart = false;
             var gridObject = LevelGrid.Instance.meuGrid.GetGridObject(position);
-            Debug.Log($"Ataque em todo os elemetos presentes no GridObject: {gridObject.ToString()}");
+            foreach(var atual in gridObject.GetDamageblesList())
+            {
+                atual.TakeDamage(10);
+            }
+
             HandlerSelection.Instance.GetSelectUnit().SubSetActionPoint(ActionCost());
             OnActionComplete();
         }
        
+    }
+    private int DamageAmount()
+    {
+        return HandlerSelection.Instance.GetSelectUnit().GetStatusBase().statusBase.forca;
     }
 
     public override bool ValidGridPosition(GridPosition gridPosition)

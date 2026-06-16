@@ -7,12 +7,12 @@ public class Unit : MonoBehaviour
 
 [SerializeField]public LayerMask layerMaskGround;
 [SerializeField]private bool isEnemy;
-[SerializeField]private int maxPointsMove = 6;
-[SerializeField]private int maxPointsActions = 5;
+[SerializeField]private StatusBaseSO statusBaseSO;
 
 
 public event EventHandler OnSelectTrue;
 public event EventHandler OnPointsChange;
+public event EventHandler OnGridPositionChange;
 
 
 private BaseAction[] ActionsAvalibleArray;
@@ -31,6 +31,7 @@ private int movePoins;
        ResetPoints();
         actionMove = GetComponent<ActionMove>();
         ActionsAvalibleArray = GetComponents<BaseAction>();
+        gridPosition = LevelGrid.Instance.meuGrid.GetGridPosition(transform.position);
     }
 
     void Start()
@@ -38,7 +39,7 @@ private int movePoins;
         HandlerSelection.Instance.OnAtualSelect += ChangeVisual;
         TurnSystem.Instance.OnTurnChange += TurnSystem_OnTurnChange;
 
-        gridPosition = LevelGrid.Instance.meuGrid.GetGridPosition(transform.position);
+        
         LevelGrid.Instance.AddUnitAtGridPosition(this, gridPosition);
       
     }
@@ -66,7 +67,8 @@ private void TurnSystem_OnTurnChange(object sender, EventArgs e)
     {
         if(gridPosition != newPosition)
         {
-        LevelGrid.Instance.ChangeGridPosition(gridPosition, newPosition, this);
+        OnGridPositionChange?.Invoke(this, EventArgs.Empty);
+        LevelGrid.Instance.ChangeGridPositionUnit(gridPosition, newPosition, this);
         gridPosition = newPosition;
         }
     }
@@ -108,9 +110,11 @@ private void TurnSystem_OnTurnChange(object sender, EventArgs e)
     public int GetMovePoints() => movePoins;
     private void ResetPoints()
     {
-    actionsPoint = maxPointsActions;
-    movePoins = maxPointsMove;
+    actionsPoint = statusBaseSO.statusBase.agilidade;
+    movePoins = statusBaseSO.statusBase.velocidade;
     }
 
     public bool HasEnemy() => isEnemy;
+
+    public StatusBaseSO GetStatusBase() => statusBaseSO;
 }

@@ -31,11 +31,25 @@ public class LevelGrid : MonoBehaviour
         meuGrid.GetGridObject(gridPosition).GetUnitsList().Remove(unit);
     }
 
-    public void ChangeGridPosition(GridPosition oldPosition, GridPosition newPosition, Unit unit)
+    public void ChangeGridPositionUnit(GridPosition oldPosition, GridPosition newPosition, Unit unit)
     {
         RemoveUnitAtGridPosition(unit, oldPosition);
         AddUnitAtGridPosition(unit, newPosition);
     }
     public bool HasNotUnitAtGridPosition(GridPosition gridPosition) => meuGrid.GetGridObject(gridPosition).HasNotUnit();
+    public void AddDamagebleAtGridPosition(IDamageble damageble, GridPosition gridPosition)
+    {
+        meuGrid.GetGridObject(gridPosition).GetDamageblesList().Add(damageble);
+    }
+     public void RemoveDamagebleAtGridPosition(IDamageble damageble, GridPosition gridPosition)
+    {
+        meuGrid.GetGridObject(gridPosition).GetDamageblesList().Remove(damageble);
+    }
+    public void ChangeGridPositionDamageble(GridPosition oldPosition, GridPosition newPosition, IDamageble damageble)
+    {
+        RemoveDamagebleAtGridPosition(damageble, oldPosition);
+        AddDamagebleAtGridPosition(damageble, newPosition);
+    }
+
 }
   

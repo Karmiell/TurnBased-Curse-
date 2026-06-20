@@ -6,5 +6,6 @@ using UnityEngine;
 public class StatusBaseSO : ScriptableObject
 {
  public StatusBase statusBase;
+ public string className;
 }
 

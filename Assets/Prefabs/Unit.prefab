@@ -85,6 +85,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2680910332363494116}
   - component: {fileID: 8295985465878793182}
+  - component: {fileID: 9032559951818389773}
   m_Layer: 5
   m_Name: HealthBar
   m_TagString: Untagged
@@ -128,6 +129,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   bar: {fileID: 5522077004684701520}
   textHealth: {fileID: 4625114292116333809}
+--- !u!114 &9032559951818389773
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1361609274482229378}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2634fe45000ef414b8956b89c09ae057, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LookAt
+  look: 2
 --- !u!1 &1391688812546248670
 GameObject:
   m_ObjectHideFlags: 0
@@ -525,8 +539,6 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 0
   isEnemy: 0
-  maxPointsMove: 6
-  maxPointsActions: 5
   statusBaseSO: {fileID: 0}
 --- !u!65 &2468903686506064292
 BoxCollider:

@@ -9,6 +9,7 @@ public class Unit : MonoBehaviour
 [SerializeField]private bool isEnemy;
 [SerializeField]private StatusBaseSO statusBaseSO;
 
+public static event EventHandler OnAnyUnitSpawn;
 
 public event EventHandler OnSelectTrue;
 public event EventHandler OnPointsChange;
@@ -32,6 +33,8 @@ private int movePoins;
         actionMove = GetComponent<ActionMove>();
         ActionsAvalibleArray = GetComponents<BaseAction>();
         gridPosition = LevelGrid.Instance.meuGrid.GetGridPosition(transform.position);
+
+    
     }
 
     void Start()
@@ -41,7 +44,7 @@ private int movePoins;
 
         
         LevelGrid.Instance.AddUnitAtGridPosition(this, gridPosition);
-      
+        OnAnyUnitSpawn?.Invoke(this, EventArgs.Empty);
     }
 private void TurnSystem_OnTurnChange(object sender, EventArgs e)
     {

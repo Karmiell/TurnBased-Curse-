@@ -35,19 +35,18 @@ private enum TurnStates
 
             case TurnStates.TakingTurn:
             if(Timer(2))return;
-            
-            
+           
             foreach(var atual in UnitManager.Instance.GetEnemyList())
             {
-            HandlerSelection.Instance.SetUnitEnemySelect(atual);
             BaseAction actionMove = atual.GetActionMove();
             actionMove.SetValidGridPositionList(atual.GetGridPosition());
-            actionMove.ActionInteract(actionMove.GetGridPositionList()[UnityEngine.Random.Range(0, actionMove.GetGridPositionList().Count)], ClearActionState);
-            }
-
-            
-            
+            GridPosition gridPosition = actionMove.GetGridPositionList()[UnityEngine.Random.Range(0, actionMove.GetGridPositionList().Count)];
+            if(!atual.TryDoAction(actionMove, gridPosition))continue;
             curentState = TurnStates.Busy;
+             HandleSelection(atual,gridPosition);
+             
+            }
+            
             break;
 
             case TurnStates.Busy:
@@ -56,11 +55,20 @@ private enum TurnStates
         }
     }
 
+private void HandleSelection(Unit unit, GridPosition gridPosition)
+    {
+
+        HandlerSelection.Instance.SetUnitEnemySelect(unit);
+        BaseAction actionMove = unit.GetActionMove();
+        
+
+        actionMove.ActionInteract(gridPosition, ClearActionState);
+          
+            
+    }
 private void ClearActionState()
     {
-        
-        HandlerSelection.Instance.ClearUnitSelect();
-        TurnSystem.Instance.NextTurn();
+     curentState = TurnStates.TakingTurn;    
     }
     private void TurnSystem_OnTurnChange(object sender, EventArgs e)
     {

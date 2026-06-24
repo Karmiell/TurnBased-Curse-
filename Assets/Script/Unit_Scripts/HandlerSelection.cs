@@ -98,6 +98,14 @@ private bool isBusy;
         unitSelect = unit;
         OnAtualSelect?.Invoke(true);
     }
+     public void SetUnitEnemySelect(Unit unit)
+    {
+        unitSelect = unit;
+    }
+    public void ClearUnitSelect() 
+    {
+        unitSelect = null;
+    }
 
     public void SetActionSelect(BaseAction baseAction)
     {

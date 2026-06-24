@@ -8,10 +8,11 @@ private enum TurnStates
     {
         WaitingUnitTurn, 
         TakingTurn,
-        ReTake
+        Busy
     }
 
     private TurnStates curentState;
+    float atualtimer = 0f;
 
     private void Awake()
     {
@@ -29,35 +30,48 @@ private enum TurnStates
         switch (curentState)
         {
             case TurnStates.WaitingUnitTurn:
-            //acho que esse é vazio mesmo
+            Debug.Log($"Inimigo {gameObject.name} Esperando...");
             break;
 
             case TurnStates.TakingTurn:
-            //if(Timer(5))return;
-
+            if(Timer(2))return;
+            
+            
             foreach(var atual in UnitManager.Instance.GetEnemyList())
             {
-            if(TryDoBestAction(atual))Debug.Log("Inimigo Fazendo coisa!");
-
-            else TurnSystem.Instance.NextTurn();
+            HandlerSelection.Instance.SetUnitEnemySelect(atual);
+            BaseAction actionMove = atual.GetActionMove();
+            actionMove.SetValidGridPositionList(atual.GetGridPosition());
+            actionMove.ActionInteract(actionMove.GetGridPositionList()[UnityEngine.Random.Range(0, actionMove.GetGridPositionList().Count)], ClearActionState);
             }
+
+            
+            
+            curentState = TurnStates.Busy;
             break;
 
-            case TurnStates.ReTake:
-            //lembro que tinha três opções mas não sei para que isso serve
+            case TurnStates.Busy:
+            Debug.Log($"Inimigo {gameObject.name} Ocupado");
             break;
         }
     }
 
+private void ClearActionState()
+    {
+        
+        HandlerSelection.Instance.ClearUnitSelect();
+        TurnSystem.Instance.NextTurn();
+    }
     private void TurnSystem_OnTurnChange(object sender, EventArgs e)
     {
+        if(TurnSystem.Instance.GetUnitTurnBool())return;
         curentState = TurnStates.TakingTurn;
     }
 
     private bool TryDoBestAction(Unit unit)
     {
         var actionMove = unit.GetActionMove();
-        if(unit.TryDoAction(actionMove, actionMove.GetGridPositionList()[UnityEngine.Random.Range(0, actionMove.GetGridPositionList().Count)]))return true;
+       
 
 
         return false;
@@ -68,9 +82,13 @@ private enum TurnStates
     }
     private bool Timer(float time)
     {
-        float atual = 0f;
-        atual += Time.deltaTime;
-        if(atual < time)return true;
+        
+        atualtimer += Time.deltaTime;
+        if(atualtimer < time)return true;
+        else
+        {
+        atualtimer = 0f;
         return false;
+        }
     }
 }
